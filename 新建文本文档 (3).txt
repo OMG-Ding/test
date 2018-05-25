@@ -1,0 +1,51 @@
+SELECT COUNT(*) as OnlineNum FROM qpgame.roleinfo WHERE LastLoginTime>=LastOnlineTime;
+
+INSERT INTO as005.onlinenum VALUES(NULL,NOW(),(SELECT COUNT(*) as OnlineNum FROM qpgame.roleinfo WHERE LastLoginTime>=LastOnlineTime));
+
+
+SHOW VARIABLES LIKE '%event_sche%';
+
+SET GLOBAL event_scheduler = 1;
+
+SHOW EVENTS ;
+
+ALTER EVENT e_test ON COMPLETION PRESERVE ENABLE;
+
+DELIMITER //
+DROP EVENT IF EXISTS e_test//
+CREATE EVENT e_test
+ON SCHEDULE EVERY 30 minute STARTS TIMESTAMP '2018-03-19 10:30:00'
+ON COMPLETION PRESERVE
+DO
+BEGIN
+INSERT INTO as005.onlinenum VALUES(NULL,NOW(),(SELECT COUNT(*) as OnlineNum FROM qpgame.roleinfo WHERE LastLoginTime>=LastOnlineTime));
+END//
+
+
+for ($i=2; $i <29 ; $i++) { 
+                $res=M('roleinfo','','DB_CONFIG1')->where("RegTime>='2018-02-{$i} 00:00:00' and RegTime <'2018-02-{$i} 23:59:59'")->count();
+                $arr=array(
+                    'createtime'=>'2018-02-'.$i,
+                    'newaddnum'=>$res
+                    );
+                M('wjnewadd','','DB_CONFIG3')->add($arr);
+            }
+
+
+
+select unionid,count(*)  from ims_mc_members group by unionid having count(*)> 1 ORDER BY COUNT(*) DESC
+
+ 
+
+SELECT * FROM qpgame.roleinfo WHERE UserID in (SELECT uid FROM ims_mc_members WHERE unionid='orbUrweu1VNkYjSZgH_l7V1JF8Do');
+
+
+SELECT * FROM qplogdb.qp_log_sucesspayorderinfo WHERE UserID in (SELECT uid FROM ims_mc_members WHERE unionid='orbUrweu1VNkYjSZgH_l7V1JF8Do');
+
+UPDATE qplogdb.qp_log_sucesspayorderinfo set UserID=401647 WHERE RoleID=964
+
+UPDATE ims_mc_members SET openid=left(openid,28)  WHERE LENGTH(openid)=29
+
+
+
+
